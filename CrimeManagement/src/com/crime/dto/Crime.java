@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface Crime {
+
 	public int getCrimeID();
 
 	public void setCrimeID(int crimeID);
@@ -39,4 +40,12 @@ public interface Crime {
 	public List<Criminal> getCriminals();
 
 	public void setCriminals(List<Criminal> criminals);
+
+	public List<Victim> getVictims();
+
+	public void setVictims(List<Victim> victims);
+
+	public List<Suspect> getSuspects();
+
+	public void setSuspects(List<Suspect> suspects);
 }

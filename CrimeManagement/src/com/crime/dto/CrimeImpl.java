@@ -13,6 +13,8 @@ public class CrimeImpl implements Crime {
 	private boolean isSolved;
 	private PoliceStation policeStation;
 	List<Criminal> criminals;
+	List<Victim> victims;
+	List<Suspect> suspects;
 
 	public CrimeImpl() {
 	}
@@ -139,6 +141,26 @@ public class CrimeImpl implements Crime {
 	@Override
 	public void setCriminals(List<Criminal> criminals) {
 		this.criminals = criminals;
+	}
+
+	@Override
+	public List<Victim> getVictims() {
+		return victims;
+	}
+
+	@Override
+	public void setVictims(List<Victim> victims) {
+		this.victims = victims;
+	}
+
+	@Override
+	public List<Suspect> getSuspects() {
+		return suspects;
+	}
+
+	@Override
+	public void setSuspects(List<Suspect> suspects) {
+		this.suspects = suspects;
 	}
 
 	@Override
