@@ -22,11 +22,11 @@ public class DBUtils {
 		}
 	}
 
-	static Connection connectToDatabase() throws SQLException {
+	public static Connection connectToDatabase() throws SQLException {
 		return DriverManager.getConnection(URL, user, password);
 	}
 
-	static void closeConnection(Connection con) throws SQLException {
+	public static void closeConnection(Connection con) throws SQLException {
 		if (con != null) {
 			con.close();
 		}

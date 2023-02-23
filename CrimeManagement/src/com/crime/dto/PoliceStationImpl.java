@@ -16,6 +16,10 @@ public class PoliceStationImpl implements PoliceStation {
 		this.name = name;
 	}
 
+	public PoliceStationImpl(int id) {
+		this.id = id;
+	}
+
 	@Override
 	public int getId() {
 		return id;
