@@ -1,6 +1,7 @@
 package com.crime.dao.UI;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import com.crime.dao.CrimeDAO;
 import com.crime.dao.CrimeDAOImpl;
@@ -10,6 +11,8 @@ import com.crime.dto.Crime;
 import com.crime.dto.CrimeImpl;
 import com.crime.dto.Criminal;
 import com.crime.dto.CriminalImpl;
+import com.crime.dto.Suspect;
+import com.crime.dto.Victim;
 import com.crime.exception.NoCrimeFoundException;
 import com.crime.exception.SomethingWentWrongException;
 
@@ -24,7 +27,8 @@ public class Main {
 //			criminalDAO.assignCrimeToCriminal(1, 2);
 //			crimeDAO.registerCrime(crime, 1);
 			Crime crime = crimeDAO.getCrimeDetails(2);
-			System.out.println(crime);
+			List<Victim> list = crimeDAO.getAllVictimsOfACrime(2);
+			list.forEach(System.out::println);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
