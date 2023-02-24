@@ -6,15 +6,19 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.crime.Utility.DBUtils;
 import com.crime.dto.Crime;
 import com.crime.dto.CrimeImpl;
 import com.crime.dto.Criminal;
+import com.crime.dto.CriminalImpl;
 import com.crime.dto.PoliceStationImpl;
 import com.crime.dto.Suspect;
+import com.crime.dto.SuspectImpl;
 import com.crime.dto.Victim;
+import com.crime.dto.VictimImpl;
 import com.crime.exception.NoCrimeFoundException;
 import com.crime.exception.NoCriminalFoundException;
 import com.crime.exception.NoPoliceStationFoundException;
@@ -124,10 +128,29 @@ public class CrimeDAOImpl implements CrimeDAO {
 	}
 
 	private Victim getAsVictim(ResultSet rs) throws SQLException {
-		Victim victim = null;
+		Victim victim = new VictimImpl();
 		victim.setId(rs.getInt("id"));
 		victim.setName(rs.getString("name"));
 		return victim;
+	}
+
+	private Suspect getAsSuspect(ResultSet rs) throws SQLException {
+		Suspect suspect = new SuspectImpl();
+		suspect.setId(rs.getInt("id"));
+		suspect.setName(rs.getString("name"));
+		return suspect;
+	}
+
+	private Criminal getAsCriminal(ResultSet rs) throws SQLException {
+		Criminal criminal = new CriminalImpl();
+		criminal.setCriminalId(rs.getInt("criminalId"));
+		criminal.setCriminalName(rs.getString("Criminalname"));
+		criminal.setAge(rs.getInt("age"));
+		criminal.setGender(rs.getString("gender"));
+		criminal.setIdentificationMark(rs.getString("identMark"));
+		criminal.setOccupation(rs.getString("occupation"));
+		criminal.setAreaOfFirstArrested(rs.getString("areaOfFirstArrested"));
+		return criminal;
 	}
 
 	@Override
@@ -161,19 +184,93 @@ public class CrimeDAOImpl implements CrimeDAO {
 	@Override
 	public List<Suspect> getAllSuspectsOfACrime(int crimeId)
 			throws NoSuspectFoundException, SomethingWentWrongException {
-		// TODO Auto-generated method stub
-		return null;
+		Connection con = null;
+		List<Suspect> list = null;
+		try {
+			con = DBUtils.connectToDatabase();
+			String QUERY = "SELECT * FROM Victim WHERE crimeId = ?";
+			PreparedStatement pstmt = con.prepareStatement(QUERY);
+			pstmt.setInt(1, crimeId);
+			ResultSet rs = pstmt.executeQuery();
+			if (isResultSetEmpty(rs)) {
+				throw new NoSuspectFoundException("No Suspect Found For crime with id " + crimeId);
+			}
+			list = new ArrayList<>();
+			while (rs.next()) {
+				list.add(getAsSuspect(rs));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SomethingWentWrongException("No Crime Found with id " + crimeId);
+		} finally {
+			try {
+				DBUtils.closeConnection(con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return list;
 	}
 
 	@Override
-	public List<Criminal> getAllCriminalsOfACrime(int id) throws NoCriminalFoundException, SomethingWentWrongException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Criminal> getAllCriminalsOfACrime(int crimeId)
+			throws NoCriminalFoundException, SomethingWentWrongException {
+		Connection con = null;
+		List<Criminal> list = null;
+		try {
+			con = DBUtils.connectToDatabase();
+			String QUERY = "select C.criminalId,C.Criminalname,C.identMark,C.gender,C.age,C.areaOfResidence,C.occupation,C.areaOfFirstArrested FROM criminalInvolvedInCrime CI INNER JOIN Crime CM ON CI.crimeID = CM.crimeId INNER JOIN Criminal C ON CI.criminalId = C.criminalId where CI.crimeID = ?";
+			PreparedStatement pstmt = con.prepareStatement(QUERY);
+			pstmt.setInt(1, crimeId);
+			ResultSet rs = pstmt.executeQuery();
+			if (isResultSetEmpty(rs)) {
+				throw new NoCriminalFoundException("No Criminal Found For crime with id " + crimeId);
+			}
+			list = new ArrayList<>();
+			while (rs.next()) {
+				list.add(getAsCriminal(rs));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SomethingWentWrongException("No Crime Found with id " + crimeId);
+		} finally {
+			try {
+				DBUtils.closeConnection(con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return list;
 	}
 
 	@Override
 	public List<Victim> getAllVictimsOfACrime(int crimeId) throws NoVictimFoundException, SomethingWentWrongException {
-		return null;
+		Connection con = null;
+		List<Victim> list = null;
+		try {
+			con = DBUtils.connectToDatabase();
+			String QUERY = "SELECT V.id,V.name  FROM Victim V INNER JOIN Crime C ON V.crimeId = C.crimeId WHERE V.crimeId = ?";
+			PreparedStatement pstmt = con.prepareStatement(QUERY);
+			pstmt.setInt(1, crimeId);
+			ResultSet rs = pstmt.executeQuery();
+			if (isResultSetEmpty(rs)) {
+				throw new NoVictimFoundException("No Victim Found For crime with id " + crimeId);
+			}
+			list = new ArrayList<>();
+			while (rs.next()) {
+				list.add(getAsVictim(rs));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SomethingWentWrongException("No Crime Found with id " + crimeId);
+		} finally {
+			try {
+				DBUtils.closeConnection(con);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return list;
 	}
 
 	@Override
