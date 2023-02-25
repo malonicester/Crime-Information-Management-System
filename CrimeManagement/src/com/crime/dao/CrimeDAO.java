@@ -69,9 +69,10 @@ public interface CrimeDAO {
 	 * @return Object Of Crime Type
 	 * @throws NoCriminalFoundException
 	 * @throws SomethingWentWrongException
-	 * @throws NoCrimeFoundException 
+	 * @throws NoCrimeFoundException
 	 */
-	public Crime getCrimeDetails(int id) throws NoCrimeFoundException, SomethingWentWrongException, NoCrimeFoundException;
+	public Crime getCrimeDetails(int id)
+			throws NoCrimeFoundException, SomethingWentWrongException, NoCrimeFoundException;
 
 	/**
 	 * to get all suspects of that crime
@@ -103,5 +104,15 @@ public interface CrimeDAO {
 	 * @throws SomethingWentWrongException
 	 */
 	public List<Victim> getAllVictimsOfACrime(int crimeId) throws NoVictimFoundException, SomethingWentWrongException;
+
+	/**
+	 * To get all the record month wise
+	 * 
+	 * @return
+	 * @throws NoCrimeFoundException
+	 */
+	public List<String> noOfRecordsResolvedAndPending() throws NoCrimeFoundException;
+
+	public List<String> getCaseMonth(int year) throws NoCrimeFoundException;
 
 }
