@@ -11,8 +11,10 @@ import com.crime.Utility.DBUtils;
 import com.crime.dto.Crime;
 import com.crime.dto.CrimeImpl;
 import com.crime.dto.Criminal;
+import com.crime.dto.CriminalImpl;
 import com.crime.dto.PoliceStationImpl;
 import com.crime.exception.NoCrimeFoundException;
+import com.crime.exception.NoCriminalFoundException;
 import com.crime.exception.SomethingWentWrongException;
 
 public class CriminalDAOImpl implements CriminalDAO {
@@ -44,7 +46,7 @@ public class CriminalDAOImpl implements CriminalDAO {
 	}
 
 	@Override
-	public void assignCrimeToCriminal(int crimeId,int criminalID) throws NoCrimeFoundException {
+	public void assignCrimeToCriminal(int crimeId, int criminalID) throws NoCrimeFoundException {
 		Connection con = null;
 		try {
 			con = DBUtils.connectToDatabase();
@@ -108,6 +110,39 @@ public class CriminalDAOImpl implements CriminalDAO {
 			e.printStackTrace();
 		}
 		return list;
+	}
+
+	private Criminal getAsCriminal(ResultSet rs) throws SQLException {
+		Criminal criminal = new CriminalImpl();
+		criminal.setCriminalId(rs.getInt("criminalId"));
+		criminal.setCriminalName(rs.getString("Criminalname"));
+		criminal.setAge(rs.getInt("age"));
+		criminal.setGender(rs.getString("gender"));
+		criminal.setIdentificationMark(rs.getString("identMark"));
+		criminal.setOccupation(rs.getString("occupation"));
+		criminal.setAreaOfFirstArrested(rs.getString("areaOfFirstArrested"));
+		return criminal;
+	}
+
+	@Override
+	public Criminal getCriminalDetails(int criminalId) throws NoCriminalFoundException {
+		Connection con = null;
+		Criminal criminal = null;
+		try {
+			con = DBUtils.connectToDatabase();
+			String QUERY = "select * from criminal where criminalid = ?";
+			PreparedStatement pstmt = con.prepareStatement(QUERY);
+			pstmt.setInt(1, criminalId);
+			ResultSet rs = pstmt.executeQuery();
+			if (isResultSetEmpty(rs)) {
+				throw new NoCriminalFoundException("No Crime Found For criminal with  id" + criminalId);
+			}
+			rs.next();
+			criminal = getAsCriminal(rs);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return criminal;
 	}
 
 }
