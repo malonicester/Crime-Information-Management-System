@@ -85,6 +85,9 @@ public class CrimeDAOImpl implements CrimeDAO {
 		}
 	}
 
+	private boolean isResultSetEmpty(ResultSet rs) throws SQLException {
+		return (!rs.isBeforeFirst() && rs.getRow() == 0);
+	}
 	@Override
 	public void addArrestDate(int crimeId, LocalDate date) throws SomethingWentWrongException {
 		Connection con = null;
@@ -110,9 +113,7 @@ public class CrimeDAOImpl implements CrimeDAO {
 		}
 	}
 
-	private boolean isResultSetEmpty(ResultSet rs) throws SQLException {
-		return (!rs.isBeforeFirst() && rs.getRow() == 0);
-	}
+	
 
 	private Crime getAsCrime(ResultSet rs) throws SQLException {
 		Crime crime = new CrimeImpl();
@@ -341,6 +342,29 @@ public class CrimeDAOImpl implements CrimeDAO {
 			}
 			while (rs.next()) {
 				String res = rs.getString("solved") + " " + rs.getInt("count");
+				list.add(res);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public List<String> getCrimesMonthWise(int year) throws NoCrimeFoundException {
+		List<String> list = new ArrayList<>();
+		Connection con = null;
+		try {
+			con = DBUtils.connectToDatabase();
+			String QUERY = "select monthname(dateOfCrime) month,count(*) count from crime  WHERE YEAR(dateOfCrime) = ? group by month;";
+			PreparedStatement pstmt = con.prepareStatement(QUERY);
+			pstmt.setInt(1, year);
+			ResultSet rs = pstmt.executeQuery();
+			if (isResultSetEmpty(rs)) {
+				throw new NoCrimeFoundException("No Crime Found For year " + year);
+			}
+			while (rs.next()) {
+				String res = rs.getString("month") + " " + rs.getInt("count");
 				list.add(res);
 			}
 		} catch (SQLException e) {

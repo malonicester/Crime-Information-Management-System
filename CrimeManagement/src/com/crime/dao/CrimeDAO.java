@@ -113,6 +113,13 @@ public interface CrimeDAO {
 	 */
 	public List<String> noOfRecordsResolvedAndPending() throws NoCrimeFoundException;
 
-	public List<String> getCaseMonth(int year) throws NoCrimeFoundException;
+	/**
+	 * Gives No of crimes reported monthly for the given year
+	 * 
+	 * @param year
+	 * @return
+	 * @throws NoCrimeFoundException
+	 */
+	public List<String> getCrimesMonthWise(int year) throws NoCrimeFoundException;
 
 }

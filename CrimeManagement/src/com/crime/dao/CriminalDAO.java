@@ -29,7 +29,7 @@ public interface CriminalDAO {
 	 * This method can be used to get all the criminal record of a criminal
 	 * 
 	 * @param criminalId
-	 * @return
+	 * @return List<String>
 	 * @throws NoCrimeFoundException
 	 */
 	public List<Crime> getRecordOfCriminal(int criminalId) throws NoCrimeFoundException;
