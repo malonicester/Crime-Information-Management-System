@@ -5,6 +5,7 @@ import java.util.List;
 import com.crime.dto.Crime;
 import com.crime.dto.Criminal;
 import com.crime.exception.NoCrimeFoundException;
+import com.crime.exception.NoCriminalFoundException;
 import com.crime.exception.SomethingWentWrongException;
 
 public interface CriminalDAO {
@@ -33,4 +34,12 @@ public interface CriminalDAO {
 	 * @throws NoCrimeFoundException
 	 */
 	public List<Crime> getRecordOfCriminal(int criminalId) throws NoCrimeFoundException;
+	/**
+	 * get all information of a criminal
+	 * @param criminalId
+	 * @return
+	 * @throws NoCriminalFoundException
+	 */
+	public Criminal  getCriminalDetails(int criminalId) throws NoCriminalFoundException;
+	
 }

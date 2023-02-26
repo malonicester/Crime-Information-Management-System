@@ -191,7 +191,7 @@ public class CrimeDAOImpl implements CrimeDAO {
 		List<Suspect> list = null;
 		try {
 			con = DBUtils.connectToDatabase();
-			String QUERY = "SELECT * FROM Victim WHERE crimeId = ?";
+			String QUERY = "SELECT * FROM Suspect WHERE crimeId = ?";
 			PreparedStatement pstmt = con.prepareStatement(QUERY);
 			pstmt.setInt(1, crimeId);
 			ResultSet rs = pstmt.executeQuery();

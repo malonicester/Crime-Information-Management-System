@@ -144,7 +144,7 @@ public class CriminalImpl implements Criminal {
 	public String toString() {
 		return "criminalId=" + criminalId + ", criminalName=" + criminalName + ", gender=" + gender + ", age=" + age
 				+ ", identificationMark=" + identificationMark + ", areaOfResidence=" + areaOfResidence
-				+ ", occupation=" + occupation + ", areaOfFirstArrested=" + areaOfFirstArrested + ", crimes=" + crimes
+				+ ", occupation=" + occupation + ", areaOfFirstArrested=" + areaOfFirstArrested
 				+ "";
 	}
 
