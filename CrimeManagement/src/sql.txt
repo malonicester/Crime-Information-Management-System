@@ -1,0 +1,90 @@
+show databases;
+use crimeManagementsystem;
+
+create table crime(
+crimeId int primary key auto_increment,
+crimeType varchar(20),
+crimeDesc varchar(100),
+dateOfCrime date,
+place varchar(20),
+solved varchar(20) default("UnSolved"));
+
+desc crime;
+
+create table criminal(
+criminalId int auto_increment,
+Criminalname varchar(50) not null,
+identMark varchar(30),
+gender varchar(8) not null,
+age int not null,
+areaOfResidence varchar(20) not null,
+occupation varchar(20),
+areaOfFirstArrested varchar(30),
+constraint primary key (criminalId,areaOfResidence)
+);
+
+create table policeStation(
+ id int primary key auto_increment,
+ name varchar(50) not null unique
+);
+
+create table criminalInvolvedInCrime(
+serialNO int primary key auto_increment,
+crimeID int,
+criminalId int,
+polStationId int,
+foreign key(crimeID) references crime(crimeId),
+foreign key(criminalId) references criminal(criminalId),
+foreign key(polStationId) references policeStation(id)
+);
+
+
+desc criminalInvolvedInCrime;
+
+create table  suspect(
+id int primary key auto_increment,
+name varchar(50) not null,
+crimeId int,
+foreign key(crimeid) references crime(crimeid)
+);
+
+desc suspect;
+
+
+create table victim(
+id int primary key auto_increment,
+name varchar(50) not null,
+crimeId int,
+foreign key(crimeid) references crime(crimeid)
+);
+-- Select C.criminalId,C.criminalName,C.identMark,C.gender,C.age,C.areaOfResidence,C.occupation,C.areaOfFirstArrested,CM.crimeType,CM.crimedesc,CM.dateOfCrime,CM.place,P.name "Police Station",CM.solved 
+-- from criminal C inner join criminalinvolvedincrime CI on  C.criminalId = CI.criminalId INNER JOIN PoliceStation P ON CI.polStationId = P.id INNER JOIN Crime CM ON CI.crimeId = CM.crimeID;
+
+truncate table 
+criminalInvolvedInCrime;
+
+alter table criminalInvolvedInCrime  add unique(crimeID,criminalId);
+
+desc suspect;
+select C.criminalId,C.Criminalname,C.identMark,C.gender,C.age,C.areaOfResidence,C.occupation,C.areaOfFirstArrested 
+from criminalInvolvedInCrime CI INNER JOIN Crime CM ON CI.crimeID = CM.crimeId INNER JOIN Criminal C ON CI.criminalId = C.criminalId where CI.crimeID = 2;
+
+select * from criminalInvolvedInCrime;
+insert into criminalInvolvedInCrime(crimeId,criminalId) values(1,2);
+select * from criminal;
+
+desc suspect;
+insert into suspect(name,crimeId) values ("Pabirtra",1);
+select * from suspect;
+Select last(id) from suspect order by id asc;
+
+desc crime;
+select C.crimeId,C.crimeType,C.crimedesc,C.dateOfCrime,C.place,C.solved,C.polStationId,C.dateOfArrest,P.Name
+from criminalInvolvedInCrime CI INNER JOIN Crime C ON CI.crimeId = C.crimeid INNER JOIN PoliceStation P ON C.polStationId = P.id where CI.criminalId = 1;
+
+select * from criminal;
+select * from crime ;
+select * from criminalInvolvedInCrime;
+select solved,count(*) as count from crime group by solved;
+
+select monthname(dateOfCrime) month,count(*) from crime  WHERE YEAR(dateOfCrime) = 2020 group by month;

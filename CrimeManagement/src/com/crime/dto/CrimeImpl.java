@@ -182,7 +182,7 @@ public class CrimeImpl implements Crime {
 	public String toString() {
 		return "crimeID=" + crimeID + ", crimeType=" + crimeType + ", crimeDesc=" + crimeDesc + ", dateOfCrime="
 				+ dateOfCrime + ", dateOfArrest=" + dateOfArrest + ", placeOfCrime=" + placeOfCrime + ", isSolved="
-				+ isSolved + ", policeStation=" + policeStation.getId() + "";
+				+ isSolved + ", policeStation=" + policeStation + "";
 	}
 
 }

@@ -2,10 +2,16 @@ package com.crime.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.crime.Utility.DBUtils;
+import com.crime.dto.Crime;
+import com.crime.dto.CrimeImpl;
 import com.crime.dto.Criminal;
+import com.crime.dto.PoliceStationImpl;
 import com.crime.exception.NoCrimeFoundException;
 import com.crime.exception.SomethingWentWrongException;
 
@@ -38,7 +44,7 @@ public class CriminalDAOImpl implements CriminalDAO {
 	}
 
 	@Override
-	public void assignCrimeToCriminal(int criminalID, int crimeId) throws NoCrimeFoundException {
+	public void assignCrimeToCriminal(int crimeId,int criminalID) throws NoCrimeFoundException {
 		Connection con = null;
 		try {
 			con = DBUtils.connectToDatabase();
@@ -60,6 +66,48 @@ public class CriminalDAOImpl implements CriminalDAO {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	private Crime getAsCrime(ResultSet rs) throws SQLException {
+		Crime crime = new CrimeImpl();
+		crime.setCrimeID(rs.getInt("crimeId"));
+		crime.setCrimeType(rs.getString("crimeType"));
+		crime.setCrimeDesc(rs.getString("crimeDesc"));
+		crime.setDateOfCrime(rs.getDate("dateOfCrime").toLocalDate());
+		crime.setPlaceOfCrime(rs.getString("place"));
+		crime.setSolved(rs.getString("solved").equalsIgnoreCase("solved") ? true : false);
+		crime.setPoliceStation(new PoliceStationImpl(rs.getString("name")));
+		if (rs.getDate("dateOfArrest") != null) {
+			crime.setDateOfArrest(rs.getDate("dateOfArrest").toLocalDate());
+		}
+		return crime;
+	}
+
+	private boolean isResultSetEmpty(ResultSet rs) throws SQLException {
+		return (!rs.isBeforeFirst() && rs.getRow() == 0);
+	}
+
+	@Override
+	public List<Crime> getRecordOfCriminal(int criminalId) throws NoCrimeFoundException {
+		Connection con = null;
+		List<Crime> list = null;
+		try {
+			con = DBUtils.connectToDatabase();
+			String QUERY = "select C.crimeId,C.crimeType,C.crimedesc,C.dateOfCrime,C.place,C.solved,C.polStationId,C.dateOfArrest,P.Name from criminalInvolvedInCrime CI INNER JOIN Crime C ON CI.crimeId = C.crimeid INNER JOIN PoliceStation P ON C.polStationId = P.id WHERE CI.criminalId = ?";
+			PreparedStatement pstmt = con.prepareStatement(QUERY);
+			pstmt.setInt(1, criminalId);
+			ResultSet rs = pstmt.executeQuery();
+			if (isResultSetEmpty(rs)) {
+				throw new NoCrimeFoundException("No Crime Found For criminal with  id" + criminalId);
+			}
+			list = new ArrayList<>();
+			while (rs.next()) {
+				list.add(getAsCrime(rs));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
 	}
 
 }
