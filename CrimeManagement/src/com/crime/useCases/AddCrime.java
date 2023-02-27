@@ -13,7 +13,7 @@ public class AddCrime {
 		CrimeDAO crimeDAO = new CrimeDAOImpl();
 		Crime crime = new CrimeImpl("Smuggling","Smuggling Of Marijuana",LocalDate.parse("2023-02-25"),"Sahid Nagar");
 		try {
-			crimeDAO.registerCrime(crime, 1);
+			crimeDAO.registerCrime(crime, 3);
 		} catch (SomethingWentWrongException e) {
 			e.printStackTrace();
 		}

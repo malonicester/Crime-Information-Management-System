@@ -10,8 +10,8 @@ public class AddCriminal {
 		CriminalDAO criminalDAO = new CriminalDAOImpl();
 		Criminal criminal = new CriminalImpl("Harsh","male",24,"Mole On Face","BhimTanki","Painter");
 		try {
-			criminalDAO.registerCriminal(criminal);
-//			criminalDAO.assignCrimeToCriminal(2, 2);
+//			criminalDAO.registerCriminal(criminal);
+			criminalDAO.assignCrimeToCriminal(8, 5);
 		} catch ( Exception e) {
 			e.printStackTrace();
 		}

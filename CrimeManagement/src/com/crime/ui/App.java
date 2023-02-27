@@ -36,8 +36,8 @@ public class App {
 
 		while (true) {
 			try {
-				System.out.println(" \n   1. View All Criminals Data  : "
-						+ " \n   2. Please enter Criminal Id to search to Criminal data : "
+				System.out.println(" \n   1. View Criminals Data  : "
+						+ " \n   2. Please enter Criminal Id to search to Crime  History : "
 						+ " \n   3. Get Number Of Resolved and Pending Cases  : "
 						+ " \n   4. Show All Victim Of  a Crime: " + " \n   5. Show All Suspects Of a Crime : "
 						+ " \n   6. Change Status Of Crime to Solved : " + " \n   7. Add Arrest Date To The Crime : "
@@ -50,26 +50,26 @@ public class App {
 					System.out.println("Enter Criminal Id ");
 					int criminalId = sc.nextInt();
 					Criminal criminal = criminalDAO.getCriminalDetails(criminalId);
-					System.out.println(
-							"id    | name     | gender  | age  | Residence    | Occuption    | Area Of First Arrested");
-					System.out.println(criminal.getCriminalId() + "      " + criminal.getCriminalName() + "       "
-							+ criminal.getGender() + "       " + criminal.getAge() + "     "
-							+ criminal.getAreaOfResidence() + "           " + criminal.getOccupation()
-							+ "                "
-							+ (criminal.getAreaOfFirstArrested() != null ? criminal.getAreaOfFirstArrested() : "NA"));
+					System.out.printf("%-4s%-20s%-10s%-20s%-20s%-10s%40s\n", "id", "name", "gender", "age", "Residence",
+							" Occuption", "Area Of First Arrested");
+					System.out.printf("%-4s%-20s%-10s%-20s%-20s%-10s%40s\n", criminal.getCriminalId(),
+							criminal.getCriminalName(), criminal.getGender(), criminal.getAge(),
+							criminal.getAreaOfResidence(), criminal.getOccupation(),
+							(criminal.getAreaOfFirstArrested() != null ? criminal.getAreaOfFirstArrested() : "NA"));
 					break;
 				case 2:
 					System.out.println("Enter Criminal Id");
 					criminalId = sc.nextInt();
-					System.out.println(
-							"id    |  Type     |        Description        |    DateOfCrime     |      Place        | Solved    | DateOfArrested   | PoliceStationName");
+					System.out.printf("%-4s%-15s%-30s%-15s%-25s%-8s%-10s%30s\n", "Id", "Type", "Description",
+							"DateOfCrime", "Place", "Solved", "DateOfArrested", "PoliceStationName");
+
 					List<Crime> list = criminalDAO.getRecordOfCriminal(criminalId);
 					for (Crime crime : list) {
-						System.out.println(crime.getCrimeID() + "        " + crime.getCrimeType() + "           "
-								+ crime.getCrimeDesc() + "            " + crime.getDateOfCrime() + "        "
-								+ crime.getPlaceOfCrime() + "       " + crime.isSolved() + "           "
-								+ (crime.getDateOfArrest() != null ? crime.getDateOfArrest() : "NA") + "         "
-								+ crime.getPoliceStation().getName().split(" ")[0]);
+						System.out.printf("%-4s%-15s%-30s%-15s%-25s%-8s%-10s%30s\n", crime.getCrimeID(),
+								crime.getCrimeType(), crime.getCrimeDesc(), crime.getDateOfCrime(),
+								crime.getPlaceOfCrime(), crime.isSolved(),
+								(crime.getDateOfArrest() != null ? crime.getDateOfArrest() : "NA"),
+								crime.getPoliceStation().getName().split(" ")[0]);
 					}
 					break;
 				case 3:
@@ -80,15 +80,15 @@ public class App {
 					System.out.println("Enter Crime Id");
 					int crimeId = sc.nextInt();
 					List<Victim> victims = crimeDAO.getAllVictimsOfACrime(crimeId);
-					System.out.println("id   | name");
-					victims.forEach((e) -> System.out.println(e.getId() + "       " + e.getName()));
+					System.out.printf("%-4s%10s\n", "id", "name");
+					victims.forEach((e) -> System.out.printf("%-4s%10s\n", e.getId(), e.getName()));
 					break;
 				case 5:
 					System.out.println("Enter Crime Id");
 					crimeId = sc.nextInt();
 					List<Suspect> suspects = crimeDAO.getAllSuspectsOfACrime(crimeId);
-					System.out.println("id | name");
-					suspects.forEach((e) -> System.out.println(e.getId() + "    " + e.getName()));
+					System.out.printf("%-4s%10s\n", "id", "name");
+					suspects.forEach((e) -> System.out.printf("%-4s%10s\n", e.getId(), e.getName()));
 					break;
 				case 6:
 					System.out.println("Enter Crime Id");
@@ -118,13 +118,13 @@ public class App {
 					System.out.println("Enter Police Station Id ");
 					int policeStationId = sc.nextInt();
 					List<Crime> crimesUnderAPoliceStation = policeDAO.getAllCasesInPoliceStation(policeStationId);
-					System.out.println(
-							"id    |  Type     |        Description        |    DateOfCrime     |      Place        | Solved    | DateOfArrested ");
+					System.out.printf("%-4s%-15s%-30s%-15s%-25s%-8s%-10s\n", "Id", "Type", "Description", "DateOfCrime",
+							"Place", "Solved", "DateOfArrested");
 					for (Crime crime : crimesUnderAPoliceStation) {
-						System.out.println(crime.getCrimeID() + "        " + crime.getCrimeType() + "           "
-								+ crime.getCrimeDesc() + "            " + crime.getDateOfCrime() + "        "
-								+ crime.getPlaceOfCrime() + "       " + crime.isSolved() + "           "
-								+ (crime.getDateOfArrest() != null ? crime.getDateOfArrest() : "NA"));
+						System.out.printf("%-4s%-15s%-30s%-15s%-25s%-8s%-10s\n", crime.getCrimeID(),
+								crime.getCrimeType(), crime.getCrimeDesc(), crime.getDateOfCrime(),
+								crime.getPlaceOfCrime(), crime.isSolved(),
+								(crime.getDateOfArrest() != null ? crime.getDateOfArrest() : "NA"));
 					}
 					break;
 				case 11:
@@ -136,5 +136,4 @@ public class App {
 		}
 
 	}
-
 }
