@@ -1,4 +1,4 @@
 # Crime Files
 
-Crime Infotmation Management System
+Crime Information Management System
 <img src = "./database.png">
