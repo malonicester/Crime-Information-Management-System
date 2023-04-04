@@ -8,10 +8,10 @@ import com.crime.dto.CriminalImpl;
 public class AddCriminal {
 	public static void main(String[] args) {
 		CriminalDAO criminalDAO = new CriminalDAOImpl();
-		Criminal criminal = new CriminalImpl("Harsh","male",24,"Mole On Face","BhimTanki","Painter");
+		Criminal criminal = new CriminalImpl("Ankit","male",34,"Mole On Face","LaxmiSagar","Cabin Crew");
 		try {
 //			criminalDAO.registerCriminal(criminal);
-			criminalDAO.assignCrimeToCriminal(8, 5);
+			criminalDAO.assignCrimeToCriminal(10, 1);
 		} catch ( Exception e) {
 			e.printStackTrace();
 		}

@@ -28,6 +28,10 @@ public class CriminalDAOImpl implements CriminalDAO {
 			PreparedStatement pstmt = con.prepareStatement(QUERY);
 			pstmt.setString(1, criminal.getCriminalName());
 			pstmt.setString(2, criminal.getIdentificationMark());
+			if(criminal.getGender().equalsIgnoreCase("male") || criminal.getGender().equalsIgnoreCase("female")) {
+				System.out.println("Not Valid");
+				return;
+			}
 			pstmt.setString(3, criminal.getGender());
 			pstmt.setInt(4, criminal.getAge());
 			pstmt.setString(5, criminal.getAreaOfResidence());
