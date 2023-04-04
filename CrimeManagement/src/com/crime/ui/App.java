@@ -17,7 +17,7 @@ import com.crime.dto.Victim;
 
 public class App {
 	static void operateTheSystem(Scanner sc) {
-		System.out.println("                          *****Welcome to Crime Management System Application*****");
+		System.out.println("                          *****Welcome to Crime Files - A Criminal Management System*****");
 		System.out.println(
 				"==================================================================================================================");
 		System.out.println("                               Please Login as Assistant Police Inspector  ");
@@ -27,8 +27,10 @@ public class App {
 		String user = sc.next();
 		System.out.println("Enter password");
 		String password = sc.next();
-		if (!user.equalsIgnoreCase("admin") || !password.equalsIgnoreCase("admin"))
+		if (!user.equalsIgnoreCase("admin") || !password.equalsIgnoreCase("admin")) {
+			System.out.println("Wrong Credintials");
 			return;
+		}
 		System.out.println("Logged In Successfully");
 		CrimeDAO crimeDAO = new CrimeDAOImpl();
 		CriminalDAO criminalDAO = new CriminalDAOImpl();
@@ -36,13 +38,18 @@ public class App {
 
 		while (true) {
 			try {
-				System.out.println(" \n   1. View Criminals Data  : "
+				System.out.println(" \n   1. View Criminal Data  : "
 						+ " \n   2. Please enter Criminal Id to search to Crime  History : "
 						+ " \n   3. Get Number Of Resolved and Pending Cases  : "
 						+ " \n   4. Show All Victim Of  a Crime: " + " \n   5. Show All Suspects Of a Crime : "
 						+ " \n   6. Change Status Of Crime to Solved : " + " \n   7. Add Arrest Date To The Crime : "
 						+ " \n   8. Add Police Station  : " + " \n   9. Number of Crimes recorded in Year By Month   : "
 						+ " \n  10. Get All The Cases Under a Police Station ." + " \n  11. Exit the App");
+				System.out.println("Enter Choice");
+				if (!sc.hasNextInt()) {
+					System.out.println("Wrong Input");
+					return;
+				}
 				int choice = sc.nextInt();
 				switch (choice) {
 				case 1:
@@ -94,6 +101,7 @@ public class App {
 					System.out.println("Enter Crime Id");
 					int crimeID = sc.nextInt();
 					crimeDAO.changeStatusOfCrime(crimeID, true);
+					System.out.println("Case Is Solved");
 					break;
 				case 7:
 					System.out.println("Enter Crime Id");
@@ -117,6 +125,7 @@ public class App {
 				case 10:
 					System.out.println("Enter Police Station Id ");
 					int policeStationId = sc.nextInt();
+					;
 					List<Crime> crimesUnderAPoliceStation = policeDAO.getAllCasesInPoliceStation(policeStationId);
 					System.out.printf("%-4s%-15s%-30s%-15s%-25s%-8s%-10s\n", "Id", "Type", "Description", "DateOfCrime",
 							"Place", "Solved", "DateOfArrested");
@@ -128,7 +137,11 @@ public class App {
 					}
 					break;
 				case 11:
+					System.out.println(" Thanks For Using");
 					return;
+
+				default:
+					System.out.println(" Wrong Input");
 				}
 			} catch (Exception ex) {
 				ex.printStackTrace();
