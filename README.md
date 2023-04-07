@@ -24,7 +24,7 @@ Crime Files is a crime Information Management System that eases storing of crime
 
 # How To use this repo?
 
-- git clone https://github.com/nikoo28/java-solutions.git
+- git clone https://github.com/malonicester/lame-crayon-5872.git
 - Open the Project in STS/Eclipse
 - Use MySQL and change your database credentials in db.properties
 - It is Command Line Application so no UI available
